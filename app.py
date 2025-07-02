@@ -62,7 +62,7 @@ def recommend(movie, genre_filter=None):
     recommended_posters = []
     recommended_overviews = []
     recommended_ratings = []
-    recommended_trailers = []
+    #recommended_trailers = []
 
     for i in movies_list:
         movie_data = movies.iloc[i[0]]
@@ -72,13 +72,15 @@ def recommend(movie, genre_filter=None):
 
         movie_id = movie_data.id
         poster, overview, rating = fetch_movie_data(movie_id)
-        trailer_url = fetch_trailer_url(movie_data.title)
+        
+        #This fetches youtube trailer
+        #trailer_url = fetch_trailer_url(movie_data.title)
 
         recommended_titles.append(movie_data.title)
         recommended_posters.append(poster)
         recommended_overviews.append(overview)
         recommended_ratings.append(rating)
-        recommended_trailers.append(trailer_url)
+        #recommended_trailers.append(trailer_url)
 
         if len(recommended_titles) == 10:
             break
@@ -88,7 +90,7 @@ def recommend(movie, genre_filter=None):
         recommended_posters,
         recommended_overviews,
         recommended_ratings,
-        recommended_trailers,
+        #recommended_trailers,
     )
 
 # --------------------------
@@ -117,7 +119,7 @@ all_genres = sorted(set(genre for sub in movies["genre_list"] for genre in sub))
 # Streamlit UI
 # --------------------------
 st.title('🎬 Movie Buddy')
-st.caption('- Movie recommender system with trailers - By Vivek ')
+st.caption('- Movie recommender system - By Vivek ')
 
 selected_movie = st.selectbox(
     "Choose a movie you like:",
@@ -144,7 +146,7 @@ with col1:
             'posters': rec[1],
             'overviews': rec[2],
             'ratings': rec[3],
-            'trailers': rec[4],
+            #'trailers': rec[4],
         }
 
 with col2:
@@ -161,7 +163,7 @@ with col2:
             'posters': rec[1],
             'overviews': rec[2],
             'ratings': rec[3],
-            'trailers': rec[4],
+            #'trailers': rec[4],
         }
 
 with col3:
@@ -182,10 +184,10 @@ if rec and rec['titles']:
                     st.markdown(f"**{rec['titles'][idx]}**")
                     st.caption(f"⭐ Rating: {rec['ratings'][idx]}")
                     st.write(rec['overviews'][idx])
-                    if rec['trailers'][idx]:
-                        st.markdown(
-                            f"[▶️ Watch Trailer]({rec['trailers'][idx]})"
-                        )
+                    #if rec['trailers'][idx]:
+                        #st.markdown(
+                           # f"[▶️ Watch Trailer]({rec['trailers'][idx]})"
+                        
 
 
 
