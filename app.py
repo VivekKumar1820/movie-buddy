@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 import random
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 # --------------------------
 # API Keys
@@ -62,7 +63,7 @@ def recommend(movie, genre_filter=None):
     recommended_posters = []
     recommended_overviews = []
     recommended_ratings = []
-    #recommended_trailers = []
+    recommended_trailers = []
 
     for i in movies_list:
         movie_data = movies.iloc[i[0]]
@@ -72,15 +73,20 @@ def recommend(movie, genre_filter=None):
 
         movie_id = movie_data.id
         poster, overview, rating = fetch_movie_data(movie_id)
-        
-        #This fetches youtube trailer
-        #trailer_url = fetch_trailer_url(movie_data.title)
+
+        # Safely try to fetch trailer
+        try:
+            trailer_url = fetch_trailer_url(movie_data.title)
+        except HttpError:
+            trailer_url = None
+        except Exception:
+            trailer_url = None
 
         recommended_titles.append(movie_data.title)
         recommended_posters.append(poster)
         recommended_overviews.append(overview)
         recommended_ratings.append(rating)
-        #recommended_trailers.append(trailer_url)
+        recommended_trailers.append(trailer_url)
 
         if len(recommended_titles) == 10:
             break
@@ -90,7 +96,7 @@ def recommend(movie, genre_filter=None):
         recommended_posters,
         recommended_overviews,
         recommended_ratings,
-        #recommended_trailers,
+        recommended_trailers,
     )
 
 # --------------------------
@@ -146,7 +152,7 @@ with col1:
             'posters': rec[1],
             'overviews': rec[2],
             'ratings': rec[3],
-            #'trailers': rec[4],
+            'trailers': rec[4],
         }
 
 with col2:
@@ -163,7 +169,7 @@ with col2:
             'posters': rec[1],
             'overviews': rec[2],
             'ratings': rec[3],
-            #'trailers': rec[4],
+            'trailers': rec[4],
         }
 
 with col3:
@@ -172,7 +178,7 @@ with col3:
         st.rerun()
 
 # Display recommendations
-rec = st.session_state.get('recommendations')
+
 if rec and rec['titles']:
     for row_start in range(0, len(rec['titles']), 3):
         cols = st.columns(3)
@@ -184,9 +190,13 @@ if rec and rec['titles']:
                     st.markdown(f"**{rec['titles'][idx]}**")
                     st.caption(f"⭐ Rating: {rec['ratings'][idx]}")
                     st.write(rec['overviews'][idx])
-                    #if rec['trailers'][idx]:
-                        #st.markdown(
-                           # f"[▶️ Watch Trailer]({rec['trailers'][idx]})"
+                    if rec['trailers'][idx]:
+                        st.markdown(
+                            f"[▶️ Watch Trailer]({rec['trailers'][idx]})"
+                        )
+                    else:
+                        st.caption("🎞️ Trailer unavailable.")
+
                         
 
 
