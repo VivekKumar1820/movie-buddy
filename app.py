@@ -13,12 +13,10 @@ from googleapiclient.errors import HttpError
 # --------------------------
 # API Keys
 # --------------------------
-import os
-from dotenv import load_dotenv
-load_dotenv()  # Load variables first!
+import streamlit as st
 
-TMDB_API_KEY = os.getenv("TMDB_API_KEY")
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+TMDB_API_KEY = st.secrets["TMDB_API_KEY"]
+YOUTUBE_API_KEY = st.secrets["YOUTUBE_API_KEY"]
 
 
 
