@@ -6,11 +6,23 @@ import random
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+
+
+
+
 # --------------------------
 # API Keys
 # --------------------------
-TMDB_API_KEY = "0e5ecf7bbd38a940928dc50b335a9a91"
-YOUTUBE_API_KEY = "AIzaSyCb0k0V6tY1D4zP9nAh_fw1L73ncyfNDZ4"
+import os
+from dotenv import load_dotenv
+load_dotenv()  # Load variables first!
+
+TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+
+
+
+
 
 # --------------------------
 # Fetch poster, overview, rating
