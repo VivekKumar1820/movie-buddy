@@ -179,6 +179,8 @@ with col3:
 
 # Display recommendations
 
+# Display recommendations
+rec = st.session_state.get('recommendations')
 if rec and rec['titles']:
     for row_start in range(0, len(rec['titles']), 3):
         cols = st.columns(3)
